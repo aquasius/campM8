@@ -20,6 +20,12 @@ namespace CampMa8.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
+        public DbSet<Camper> Camper { get; set; }
+        public DbSet<Event> Event { get; set; }
+        public DbSet<CampEvent> CampEvent { get; set; }
+        public DbSet<CampExperience> Experience { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

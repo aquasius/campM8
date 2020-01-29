@@ -168,14 +168,33 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CampersController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001291911387_trying again.cs" />
+    <Compile Include="Migrations\202001291911387_trying again.Designer.cs">
+      <DependentUpon>202001291911387_trying again.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001292212055_changed campgroundName.cs" />
+    <Compile Include="Migrations\202001292212055_changed campgroundName.Designer.cs">
+      <DependentUpon>202001292212055_changed campgroundName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\GooglePlacesKeyController.cs" />
+    <Compile Include="Models\Camper.cs" />
+    <Compile Include="Models\CampEvent.cs" />
+    <Compile Include="Models\CampExperience.cs" />
+    <Compile Include="Models\Campground.cs" />
+    <Compile Include="Models\CampgroundDetailsKey.cs" />
+    <Compile Include="Models\CampgroundSearchAPIKey.cs" />
+    <Compile Include="Models\CampsiteSearchKey.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\GoogleMapsKey.cs" />
+    <Compile Include="Models\GooglePlacesKey.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -240,6 +259,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Campers\" />
+    <Folder Include="Views\Events\" />
     <Folder Include="Views\GooglePlacesKey\" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +275,14 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202001291911387_trying again.resx">
+      <DependentUpon>202001291911387_trying again.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001292212055_changed campgroundName.resx">
+      <DependentUpon>202001292212055_changed campgroundName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
