@@ -1,6 +1,7 @@
 ﻿using CampMa8.Models;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace CampMa8.Controllers
         public ActionResult Index()
         {
             var userId = GetAppId();
-            var camper = GetPlayerByAppId(userId);
+            var camper = GetCamperByAppId(userId);
             return View(camper);
         }
 
@@ -29,7 +30,7 @@ namespace CampMa8.Controllers
         public ActionResult Details()
         {
             var userid = GetAppId();
-            var camper = GetPlayerByAppId(userid);
+            var camper = GetCamperByAppId(userid);
             return View(camper);
         }
 
@@ -105,7 +106,7 @@ namespace CampMa8.Controllers
         public async System.Threading.Tasks.Task<ActionResult> CampgroundLocationsAsync()
         {
             var id = GetAppId();
-            Camper camper = GetPlayerByAppId(id);
+            Camper camper = GetCamperByAppId(id);
             List<Campground> campgrounds = new List<Campground>();
             string url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=park+in+" + camper.ZipCode + "&key=" + GooglePlacesKey.Key;
             HttpClient client = new HttpClient();
@@ -129,7 +130,7 @@ namespace CampMa8.Controllers
         //GET: Players/Delete/5
         public ActionResult Delete(int id)
         {
-            var camper = GetPlayerByPlayerId(id);
+            var camper = GetCamperByCamperId(id);
 
             return View(camper);
         }
@@ -141,7 +142,7 @@ namespace CampMa8.Controllers
             try
             {
                 // TODO: Add delete logic here
-                camper = GetPlayerByPlayerId(id);
+                camper = GetCamperByCamperId(id);
                 var userdelete = db.Users.SingleOrDefault(c => c.Id == camper.ApplicationId);
                 camper.ApplicationId = null;
                 db.Camper.Remove(camper);
@@ -155,24 +156,24 @@ namespace CampMa8.Controllers
             }
         }
 
-        public ActionResult CampExperience()
+        public ActionResult RateCampExperience()
         {
-            var CampExperience = db.Experience.Select(s => s.Experience).ToList();
+            var CampExperience = db.Experience.Select(e => e.Experience).ToList();
             ViewBag.CampExperience = new SelectList(CampExperience);
             var userid = GetAppId();
-            var camper = GetPlayerByAppId(userid);
-            string yesterday = DateTime.Today.AddDays(-1).ToString("MM/dd/yyyy");
-            var campcompleted = db.Event.Include(e => e.).Where(e => e.DateOfEvent == yesterday).ToList();
+            var camper = GetCamperByAppId(userid);
+            string yesterday = DateTime.Today.AddDays(-1).ToString("mm/dd/yyyy");
+            var campcompleted = db.Event.Include("Camper").Where(e => e.DateOfEvent == yesterday).ToList();
             List<Camper> campers = new List<Camper>();
 
             foreach (var item in campcompleted)
             {
-                var campersforevent = db.CampEvent.Select(c => c.Camper).Include(c => c.).Where(c => c.EventId == item.EventId && c.CamperId != camper.CamperId).Select(c => c.Camper).ToList();
+                var campersforevent = db.CampEvent.Include("Camper").Include("Event").Where(c => c.EventId == item.EventId && c.CamperId == camper.CamperId).Select(c => c.Camper).ToList();
                 campers.Concat(campersforevent);
             }
             if (campers.Count == 0)
             {
-                return RedirectToAction("PlayerInterestEvents", "Events");
+                return RedirectToAction("MyEvents", "Events");
             }
             else
             {
@@ -180,35 +181,81 @@ namespace CampMa8.Controllers
             }
 
         }
-        //[HttpPost]
-        //public ActionResult RateCampExperience(List<Camper> campers)
-        //{
-        //    try
-        //    {
-        //        foreach (var item in campers)
-        //        {
-        //            var camper = db.Camper.Include(c => c.ApplicationUser).Where(c => c.CamperId == item.CamperId).FirstOrDefault();
-        //            if (camper.CampExperience == 0)
-        //            {
-        //                camper.CampExperience += item.CampExperience;
-        //                db.SaveChanges();
-        //            }
-        //            else
-        //            {
-        //                camper.CampExperience = Math.Round(((camper.CampExperience + item.CampExperience) / 2), 2);
-        //                db.SaveChanges();
-        //            }
-        //        }
-        //        return RedirectToAction("PlayerInterestEvents", "Events");
-        //    }
-        //    catch (Exception)
-        //    {
+        [HttpPost]
+        public ActionResult RateCampExperience(List<Camper> campers)
+        {
+            try
+            {
+                foreach (var item in campers)
+                {
+                    var camper = db.Camper.Include("ApplicationUser").Where(c => c.CamperId == item.CamperId).FirstOrDefault();
+                    if (camper.CampExperience == 0)
+                    {
+                        camper.CampExperience += item.CampExperience;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        camper.CampExperience = Math.Round(((camper.CampExperience + item.CampExperience) / 2), 2);
+                        db.SaveChanges();
+                    }
+                }
+                return RedirectToAction("MyEvents", "Events");
+            }
+            catch (Exception)
+            {
 
-        //        return RedirectToAction("PlayerInterestEvents", "Events");
-        //    }
+                return RedirectToAction("MyEvents", "Events");
+            }
 
 
-        //}
+        }
+
+        public List<Campground> APIStringCall()
+        {
+            string state = "";
+            string rv = "";
+            string fishing = "";
+            string electric = "";
+            string url = "";
+            if (state != "")
+            {
+                url = "pstate=" + state;
+            }
+            if (rv != "" && state != "")
+            {
+                url += "&siteType=" + rv;
+            }
+            else
+            {
+                url = "siteType=" + rv;
+            }
+            "http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h"
+            List<Campground> campgrounds = new List<Campground>();
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
+            var campgroundQuery = httpClient.GetAsync("campgrounds/?" + url);
+            campgroundQuery.Wait();
+            var campResult = campgroundQuery.Result;
+            if (campResult.IsSuccessStatusCode)
+            {
+                var read = y.Content.ReadAsStringAsync();
+                read.Wait();
+                var campground = read.Result;
+                JArray jArray = JArray.Parse(campground);
+                foreach (var item in jArray)
+                {
+                    var campAttributes = new Campground()
+                    {
+                        CampgroundName = (string)item["facilityName"],
+                        Latitude = (float)item["latitude"],
+                        Longitude = (float)item["longitude"]
+                    };
+                    campgrounds.Add(campAttributes);
+                }
+            }
+            return campgrounds;
+        }
 
         public string GetAppId()
         {
@@ -218,12 +265,12 @@ namespace CampMa8.Controllers
 
         public Camper GetCamperByAppId(string userid)
         {
-            var camper = db.Camper.Include(c => c.ApplicationUser).Where(c => c.ApplicationId == userid).FirstOrDefault();
+            var camper = db.Camper.Include("ApplicationUser").Where(c => c.ApplicationId == userid).FirstOrDefault();
             return camper;
         }
         public Camper GetCamperByCamperId(int id)
         {
-            var camper = db.Camper.Include(c => c.ApplicationUser).Where(c => c.CamperId == id).FirstOrDefault();
+            var camper = db.Camper.Include("ApplicationUser").Where(c => c.CamperId == id).FirstOrDefault();
             return camper;
         }
 

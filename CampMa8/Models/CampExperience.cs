@@ -11,6 +11,6 @@ namespace CampMa8.Models
         [Key]
         public int Id { get; set; }
         [Display(Name = "Camp Experience")]
-        public int Experience { get; set; }
+        public double Experience { get; set; }
     }
 }
