@@ -103,31 +103,31 @@ namespace CampMa8.Controllers
             }
         }
 
-        public async System.Threading.Tasks.Task<ActionResult> CampgroundLocationsAsync()
-        {
-            var id = GetAppId();
-            Camper camper = GetCamperByAppId(id);
-            List<Campground> campgrounds = new List<Campground>();
-            string url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=park+in+" + camper.ZipCode + "&key=" + GooglePlacesKey.Key;
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(url);
-            string jsonResult = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                PlacesJSONResult postManJSON = JsonConvert.DeserializeObject<PlacesJSONResult>(jsonResult);
-                foreach (var result in postManJSON.results)
-                {
-                    Campground campground = new Campground();
-                    campground.Latitude = result.geometry.location.lat;
-                    campground.Longitude = result.geometry.location.lng;
-                    campground.CampgroundName = result.name;
-                    campgrounds.Add(campground);
-                }
-                return View(campgrounds);
-            }
-            return View();
-        }
-        //GET: Players/Delete/5
+        //public async System.Threading.Tasks.Task<ActionResult> CampgroundLocationsAsync()
+        //{
+        //    var id = GetAppId();
+        //    Camper camper = GetCamperByAppId(id);
+        //    List<Campground> campgrounds = new List<Campground>();
+        //    string url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=park+in+" + camper.ZipCode + "&key=" + GooglePlacesKey.Key;
+        //    HttpClient client = new HttpClient();
+        //    HttpResponseMessage response = await client.GetAsync(url);
+        //    string jsonResult = await response.Content.ReadAsStringAsync();
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        PlacesJSONResult postManJSON = JsonConvert.DeserializeObject<PlacesJSONResult>(jsonResult);
+        //        foreach (var result in postManJSON.results)
+        //        {
+        //            Campground campground = new Campground();
+        //            campground.Latitude = result.geometry.location.lat;
+        //            campground.Longitude = result.geometry.location.lng;
+        //            campground.CampgroundName = result.name;
+        //            campgrounds.Add(campground);
+        //        }
+        //        return View(campgrounds);
+        //    }
+        //    return View();
+        //}
+        //GET: Campers/Delete/5
         public ActionResult Delete(int id)
         {
             var camper = GetCamperByCamperId(id);
@@ -135,7 +135,7 @@ namespace CampMa8.Controllers
             return View(camper);
         }
 
-        //POST: Players/Delete/5
+        //POST: Campers/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, Camper camper)
         {
@@ -156,6 +156,7 @@ namespace CampMa8.Controllers
             }
         }
 
+        //rating the experience of the trip/campground after trip completion
         public ActionResult RateCampExperience()
         {
             var CampExperience = db.Experience.Select(e => e.Experience).ToList();
@@ -181,6 +182,8 @@ namespace CampMa8.Controllers
             }
 
         }
+
+       
         [HttpPost]
         public ActionResult RateCampExperience(List<Camper> campers)
         {
@@ -211,7 +214,7 @@ namespace CampMa8.Controllers
 
         }
 
-        public List<Campground> APIStringCall()
+        public List<Campground> CampgroundAPIStringCall()
         {
             string state = "";
             string rv = "";
@@ -230,7 +233,7 @@ namespace CampMa8.Controllers
             {
                 url = "siteType=" + rv;
             }
-            "http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h"
+            //"http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h";
             List<Campground> campgrounds = new List<Campground>();
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
@@ -239,7 +242,7 @@ namespace CampMa8.Controllers
             var campResult = campgroundQuery.Result;
             if (campResult.IsSuccessStatusCode)
             {
-                var read = y.Content.ReadAsStringAsync();
+                var read = campResult.Content.ReadAsStringAsync();
                 read.Wait();
                 var campground = read.Result;
                 JArray jArray = JArray.Parse(campground);
@@ -247,7 +250,8 @@ namespace CampMa8.Controllers
                 {
                     var campAttributes = new Campground()
                     {
-                        CampgroundName = (string)item["facilityName"],
+                        facilityName = (string)item["facilityName"],
+
                         Latitude = (float)item["latitude"],
                         Longitude = (float)item["longitude"]
                     };

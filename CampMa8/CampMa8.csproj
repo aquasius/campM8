@@ -183,6 +183,10 @@
     <Compile Include="Migrations\202001292212055_changed campgroundName.Designer.cs">
       <DependentUpon>202001292212055_changed campgroundName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001311723324_added campsite table.cs" />
+    <Compile Include="Migrations\202001311723324_added campsite table.Designer.cs">
+      <DependentUpon>202001311723324_added campsite table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Camper.cs" />
@@ -191,6 +195,7 @@
     <Compile Include="Models\Campground.cs" />
     <Compile Include="Models\CampgroundDetailsKey.cs" />
     <Compile Include="Models\CampgroundSearchAPIKey.cs" />
+    <Compile Include="Models\Campsite.cs" />
     <Compile Include="Models\CampsiteSearchKey.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\GoogleMapsKey.cs" />
@@ -282,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001292212055_changed campgroundName.resx">
       <DependentUpon>202001292212055_changed campgroundName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001311723324_added campsite table.resx">
+      <DependentUpon>202001311723324_added campsite table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -10,10 +10,17 @@ namespace CampMa8.Models
     {
         [Key]
         public int Id { get; set; }
-        public string CampgroundName { get; set; }
+        public string availabilityStatus { get; set; }
+        public string facilityID { get; set; }
+        public string facilityName { get; set; }
+        public string faciltyPhoto { get; set; }
+        public string siteType { get; set; }
+        public string sitesWithPetsAllowed { get; set; }
+        public string sitesWithWaterfront { get; set; }
+        public string sitesWithAmps { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }
 
-        public string apiKeyString = "https://maps.googleapis.com/maps/api/js?key=" + GoogleMapsKey.Key + "&callback=initializeMap";
+       // public string apiKeyString = "https://maps.googleapis.com/maps/api/js?key=" + GoogleMapsKey.Key + "&callback=initializeMap";
     }
 }
