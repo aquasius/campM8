@@ -10,14 +10,17 @@ namespace CampMa8.Models
     {
         [Key]
         public int Id { get; set; }
-        public string availabilityStatus { get; set; }
+        [Required]
+        public string contractID { get; set; }
+        public string contractType { get; set; }
+        public string amenities { get; set; }
         public string facilityID { get; set; }
         public string facilityName { get; set; }
         public string faciltyPhoto { get; set; }
         public string siteType { get; set; }
         public string sitesWithPetsAllowed { get; set; }
         public string sitesWithWaterfront { get; set; }
-        public string sitesWithAmps { get; set; }
+        public string hookups { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }
 

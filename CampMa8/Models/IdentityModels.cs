@@ -22,6 +22,7 @@ namespace CampMa8.Models
     {
 
         public DbSet<Camper> Camper { get; set; }
+        public DbSet<Campground> Campground { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<CampEvent> CampEvent { get; set; }
         public DbSet<CampExperience> Experience { get; set; }

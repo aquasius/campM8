@@ -169,6 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CampersController.cs" />
+    <Compile Include="Controllers\CampgroundController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -186,6 +187,18 @@
     <Compile Include="Migrations\202001311723324_added campsite table.cs" />
     <Compile Include="Migrations\202001311723324_added campsite table.Designer.cs">
       <DependentUpon>202001311723324_added campsite table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002031550511_added contract type and id.cs" />
+    <Compile Include="Migrations\202002031550511_added contract type and id.Designer.cs">
+      <DependentUpon>202002031550511_added contract type and id.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002031707344_updating.cs" />
+    <Compile Include="Migrations\202002031707344_updating.Designer.cs">
+      <DependentUpon>202002031707344_updating.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002031925118_updating again.cs" />
+    <Compile Include="Migrations\202002031925118_updating again.Designer.cs">
+      <DependentUpon>202002031925118_updating again.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -262,10 +275,12 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Events\MyEvents.cshtml" />
+    <Content Include="Views\Campground\Index.cshtml" />
+    <Content Include="Views\Campers\Search.cshtml" />
+    <Content Include="Views\Events\EventEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Campers\" />
     <Folder Include="Views\GooglePlacesKey\" />
   </ItemGroup>
   <ItemGroup>
@@ -290,6 +305,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001311723324_added campsite table.resx">
       <DependentUpon>202001311723324_added campsite table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002031550511_added contract type and id.resx">
+      <DependentUpon>202002031550511_added contract type and id.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002031707344_updating.resx">
+      <DependentUpon>202002031707344_updating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002031925118_updating again.resx">
+      <DependentUpon>202002031925118_updating again.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

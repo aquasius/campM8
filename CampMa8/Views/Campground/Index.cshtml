@@ -1,0 +1,99 @@
+﻿@model IEnumerable<CampMa8.Models.Campground>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.contractID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.contractType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.amenities)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.facilityID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.facilityName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.faciltyPhoto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.siteType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sitesWithPetsAllowed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sitesWithWaterfront)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hookups)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitude)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.contractID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.contractType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.amenities)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.facilityID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.facilityName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.faciltyPhoto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.siteType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sitesWithPetsAllowed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sitesWithWaterfront)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.hookups)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Longitude)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

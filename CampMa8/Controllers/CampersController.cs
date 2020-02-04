@@ -26,6 +26,18 @@ namespace CampMa8.Controllers
             return View(camper);
         }
 
+        public ActionResult Search()
+        {
+            Campground campground = new Campground();
+            return View(campground);
+        }
+
+        [HttpPost]
+        public ActionResult Search(Campground campground)
+        {
+            return RedirectToAction("Index", "Campground", campground);
+        }
+
         // GET: Campers/Details/5
         public ActionResult Details()
         {
@@ -214,52 +226,58 @@ namespace CampMa8.Controllers
 
         }
 
-        public List<Campground> CampgroundAPIStringCall()
-        {
-            string state = "";
-            string rv = "";
-            string fishing = "";
-            string electric = "";
-            string url = "";
-            if (state != "")
-            {
-                url = "pstate=" + state;
-            }
-            if (rv != "" && state != "")
-            {
-                url += "&siteType=" + rv;
-            }
-            else
-            {
-                url = "siteType=" + rv;
-            }
-            //"http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h";
-            List<Campground> campgrounds = new List<Campground>();
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
-            var campgroundQuery = httpClient.GetAsync("campgrounds/?" + url);
-            campgroundQuery.Wait();
-            var campResult = campgroundQuery.Result;
-            if (campResult.IsSuccessStatusCode)
-            {
-                var read = campResult.Content.ReadAsStringAsync();
-                read.Wait();
-                var campground = read.Result;
-                JArray jArray = JArray.Parse(campground);
-                foreach (var item in jArray)
-                {
-                    var campAttributes = new Campground()
-                    {
-                        facilityName = (string)item["facilityName"],
+        //public List<Campsite> CampsiteAPIStringCall()
+        //{
+        //    string state = "";
+        //    string rv = "2001";
+        //    string tent = "2003";
+        //    string electric = "";
+        //    string url = "";
+        //    if (state != "")
+        //    {
+        //        url = "ContractCode=" + state;
+        //    }
+        //    if (rv != "" && state != "")
+        //    {
+        //        url += "&siteType=" + rv;
+        //    }
+        //    else
+        //    {
+        //        url = "siteType=" + rv;
+        //    }
+        //    //"http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h";
+        //    List<Campground> campgrounds = new List<Campground>();
+        //    HttpClient httpClient = new HttpClient();
+        //    httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
+        //    var campgroundQuery = httpClient.GetAsync("campgrounds/?" + url);
+        //    campgroundQuery.Wait();
+        //    var campResult = campgroundQuery.Result;
+        //    if (campResult.IsSuccessStatusCode)
+        //    {
+        //        var read = campResult.Content.ReadAsStringAsync();
+        //        read.Wait();
+        //        var campground = read.Result;
+        //        JArray jArray = JArray.Parse(campground);
+        //        foreach (var item in jArray)
+        //        {
+        //            var campAttributes = new Campground()
+        //            {
 
-                        Latitude = (float)item["latitude"],
-                        Longitude = (float)item["longitude"]
-                    };
-                    campgrounds.Add(campAttributes);
-                }
-            }
-            return campgrounds;
-        }
+        //                facilityID = (string)item["facilityID"],
+        //                facilityName = (string)item["facilityName"],
+        //                faciltyPhoto = (string)item["facilityPhoto"],
+        //                siteType = (string)item["siteType"],
+        //                sitesWithPetsAllowed = (string)item["sitesWithPetsAllowed"],
+        //                sitesWithAmps = (string)item["sitesWithAmps"],
+        //                sitesWithWaterfront = (string)item["sitesWithAmps"],
+        //                Latitude = (float)item["latitude"],
+        //                Longitude = (float)item["longitude"]
+        //            };
+        //            campgrounds.Add(campAttributes);
+        //        }
+        //    }
+        //    //return campgrounds;
+        //}
 
         public string GetAppId()
         {

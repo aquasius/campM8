@@ -15,8 +15,7 @@ namespace CampMa8.Models
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Display(Name = "Zip Code")]
-        public int ZipCode { get; set; }
+        
         [Display(Name = "Camp Experience")]
         public double CampExperience { get; set; }
         [ForeignKey("ApplicationUser")]
