@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -278,6 +279,9 @@
     <Content Include="Views\Campground\Index.cshtml" />
     <Content Include="Views\Campers\Search.cshtml" />
     <Content Include="Views\Events\EventEdit.cshtml" />
+    <Content Include="Views\Campers\Create.cshtml" />
+    <Content Include="Views\Campers\Delete.cshtml" />
+    <Content Include="Views\Campers\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
