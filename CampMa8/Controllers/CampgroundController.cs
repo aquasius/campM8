@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace CampMa8.Controllers
@@ -21,8 +23,10 @@ namespace CampMa8.Controllers
             return View(camps);
         }
 
+
         public List<Campground> CampgroundAPIStringCall(Campground campground)
         {
+
             string state = campground.contractID;
             string siteType = campground.siteType;
             string amenity = campground.amenities;
@@ -42,41 +46,34 @@ namespace CampMa8.Controllers
                 url += "&hookup=" + hookup;
             }
             List<Campground> campgrounds = new List<Campground>();
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
-            var campgroundQuery = httpClient.GetAsync("campgrounds/?" + url + apiKey);
-            campgroundQuery.Wait();
-            var campResult = campgroundQuery.Result;
-            if (campResult.IsSuccessStatusCode)
+            WebRequest request = WebRequest.Create("http://api.amp.active.com/camping/" + "campgrounds/?" + url + apiKey);
+            WebResponse response = request.GetResponse();
+            XDocument doc = XDocument.Load(response.GetResponseStream());
+            var newDoc = new XDocument(new XElement("resultset",
+                from p in doc.Element("resultset").Elements("result")
+                select p));
+            var nodes = newDoc.Element("resultset");
+            XNode currentnode;
+            XNode holder;
+            do
             {
-                var read = campResult.Content.ReadAsStringAsync();
-                read.Wait();
-                var camp = read.Result;
-                Type type = typeof(Campground);
-                XmlDocument document = new XmlDocument();
-                var strReader = new StringReader(camp);
-                var serializer = new XmlSerializer((type), new XmlRootAttribute("result"));
-                var xmlReader = new XmlTextReader(strReader);
-                var obj = serializer.Deserialize(xmlReader);
-                //foreach (var item in obj)
-                //{
-                //    var campAttributes = new Campground()
-                //    {
-                //        contractID = (string)item["contractID"],
-                //        contractType = (string)item["contractType"],
-                //        facilityID = (string)item["facilityID"],
-                //        facilityName = (string)item["facilityName"],
-                //        faciltyPhoto = (string)item["facilityPhoto"],
-                //        siteType = (string)item["siteType"],
-                //        sitesWithPetsAllowed = (string)item["sitesWithPetsAllowed"],
-                //        hookups = (string)item["sitesWithAmps"],
-                //        sitesWithWaterfront = (string)item["sitesWithAmps"],
-                //        Latitude = (float)item["latitude"],
-                //        Longitude = (float)item["longitude"]
-                //    };
-                //    campgrounds.Add(campAttributes);
-                //}
-            }
+                currentnode = nodes.FirstNode;
+                XElement node = nodes.Element("result");
+                Campground apiCamp = new Campground()
+                {
+                    contractID = node.Attribute("contractID").Value,
+                    contractType = node.Attribute("contractType").Value,
+                    facilityID = node.Attribute("facilityID").Value,
+                    facilityName = node.Attribute("facilityName").Value,
+                    faciltyPhoto = node.Attribute("faciltyPhoto").Value,
+                    sitesWithPetsAllowed = node.Attribute("sitesWithPetsAllowed").Value,
+                    sitesWithWaterfront = node.Attribute("sitesWithWaterfront").Value,
+                    hookups = node.Attribute("sitesWithAmps").Value
+                };
+                campgrounds.Add(apiCamp);
+                holder = currentnode.NextNode;
+                currentnode.Remove();
+            } while (holder != null);
             return campgrounds;
         }
     }

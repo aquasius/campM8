@@ -35,6 +35,63 @@ namespace CampMa8.Controllers
         [HttpPost]
         public ActionResult Search(Campground campground)
         {
+            switch (campground.amenities.ToLower())
+            {
+                case "hiking":
+                    campground.amenities = "4006";
+                    break;
+                case "scenic trails":
+                    campground.amenities = "4010";
+                    break;
+                case "fishing":
+                campground.amenities = "4004";
+                    break;
+                case "hunting":
+                    campground.amenities = "4008";
+                    break;
+                case "biking":
+                    campground.amenities = "4001";
+                    break;
+                case "beach/water activities":
+                    campground.amenities = "4012";
+                    break;
+                case "equipment rental":
+                    campground.amenities = "4003";
+                    break;
+                default:
+                    campground.amenities = null;
+                    break;
+            }
+            switch (campground.siteType.ToLower())
+            {
+                case "tent":
+                    campground.siteType = "2003";
+                    break;
+                case "RV":
+                    campground.siteType = "2001";
+                    break;
+                case "cabin/lodging":
+                    campground.siteType = "10001";
+                    break;
+                case "group site":
+                    campground.siteType = "9002";
+                    break;
+                case "trailer":
+                    campground.siteType = "2002";
+                    break;
+                default:
+                    campground.siteType = null;
+                    break;
+            }
+            switch (campground.sitesWithPetsAllowed.ToLower())
+            {
+                case "true":
+                    campground.sitesWithPetsAllowed = "3010";
+                    break;
+                default:
+                    campground.sitesWithPetsAllowed = null;
+                    break;
+            }
             return RedirectToAction("Index", "Campground", campground);
         }
 
@@ -50,9 +107,6 @@ namespace CampMa8.Controllers
         public ActionResult Create()
         {
             Camper camper = new Camper();
-            //////ViewBag.SkillLevel = new SelectList(campexp);
-            //////var SportsInterest = db.Sport.Select(s => s.SportName).ToList();
-            //////ViewBag.SportsInterest = new SelectList(SportsInterest);
             return View(camper);
         }
 
@@ -81,10 +135,6 @@ namespace CampMa8.Controllers
         public ActionResult Edit(int id)
         {
             var camper = GetCamperByCamperId(id);
-            //var skilllevel = db.SkillLevel.Select(s => s.Level).ToList();
-            //ViewBag.SkillLevel = new SelectList(skilllevel);
-            //var SportsInterest = db.Sport.Select(s => s.SportName).ToList();
-            //ViewBag.SportsInterest = new SelectList(SportsInterest);
             return View(camper);
         }
 
@@ -96,10 +146,6 @@ namespace CampMa8.Controllers
             try
             {
                 // TODO: Add update logic here
-                //var SportsInterest = db.Sport.Select(s => s.SportName).ToList();
-                //ViewBag.SportsInterest = new SelectList(SportsInterest);
-                //var skilllevel = db.SkillLevel.Select(s => s.Level).ToList();
-                //ViewBag.SkillLevel = new SelectList(skilllevel);
                 var camperedit = GetCamperByCamperId(id);
                 camperedit.FirstName = camper.FirstName;
                 camperedit.LastName = camper.LastName;
@@ -226,58 +272,7 @@ namespace CampMa8.Controllers
 
         }
 
-        //public List<Campsite> CampsiteAPIStringCall()
-        //{
-        //    string state = "";
-        //    string rv = "2001";
-        //    string tent = "2003";
-        //    string electric = "";
-        //    string url = "";
-        //    if (state != "")
-        //    {
-        //        url = "ContractCode=" + state;
-        //    }
-        //    if (rv != "" && state != "")
-        //    {
-        //        url += "&siteType=" + rv;
-        //    }
-        //    else
-        //    {
-        //        url = "siteType=" + rv;
-        //    }
-        //    //"http://api.amp.active.com/camping/campgrounds/?pstate=WI&siteType=10001&amenity=4004&hookup=3002&pets=3010&api_key=393hzezzah7m97qapvvfqy5h";
-        //    List<Campground> campgrounds = new List<Campground>();
-        //    HttpClient httpClient = new HttpClient();
-        //    httpClient.BaseAddress = new Uri("http://api.amp.active.com/camping/");
-        //    var campgroundQuery = httpClient.GetAsync("campgrounds/?" + url);
-        //    campgroundQuery.Wait();
-        //    var campResult = campgroundQuery.Result;
-        //    if (campResult.IsSuccessStatusCode)
-        //    {
-        //        var read = campResult.Content.ReadAsStringAsync();
-        //        read.Wait();
-        //        var campground = read.Result;
-        //        JArray jArray = JArray.Parse(campground);
-        //        foreach (var item in jArray)
-        //        {
-        //            var campAttributes = new Campground()
-        //            {
-
-        //                facilityID = (string)item["facilityID"],
-        //                facilityName = (string)item["facilityName"],
-        //                faciltyPhoto = (string)item["facilityPhoto"],
-        //                siteType = (string)item["siteType"],
-        //                sitesWithPetsAllowed = (string)item["sitesWithPetsAllowed"],
-        //                sitesWithAmps = (string)item["sitesWithAmps"],
-        //                sitesWithWaterfront = (string)item["sitesWithAmps"],
-        //                Latitude = (float)item["latitude"],
-        //                Longitude = (float)item["longitude"]
-        //            };
-        //            campgrounds.Add(campAttributes);
-        //        }
-        //    }
-        //    //return campgrounds;
-        //}
+        
 
         public string GetAppId()
         {
